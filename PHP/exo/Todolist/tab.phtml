@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+	<title>ToDolist</title>
+</head>
+<body>
+ <style>
+body{
+  background-color:;
+
+}
+.priority-normal{
+  color:red;
+}
+
+
+
+
+ </style>
+<article>
+<h1>Gestionnaire de taches</h1>
+
+
+
+           <?php if(empty($tasks) == false): ?>
+                <!-- Formulaire listant toutes les tâches existantes avec possibilité de suppression. -->
+
+       <form class="standard-form" action="remove.php" method="POST">
+            <ul class="task-list">
+                    
+                    
+             <?php foreach($tasks as $index => $taskData): ?>
+                     <li>
+                 <input id="task-<?= $index ?>" type="checkbox" name="indexes[]" value="<?= $index ?>">
+                <label for="task-<?= $index ?>" class="<?= $taskData[3] ?> ">
+                <?= $taskData[0] ?>
+                <?php if(date_create($taskData[2]) < $now): ?>
+                   <strong>- en retard</strong>
+                <?php endif ?>
+                </label>
+               <p><?= $taskData[1] ?></p>
+               </li>
+          <?php endforeach ?>
+                        
+                        
+                        
+                <li>
+           <input type="submit" value="Supprimer" title="Supprimer les tâches sélectionnées">
+             </li>
+             </ul>
+                </form>
+                <hr>
+
+            <?php endif ?>
+
+
+
+
+		<form action= "add.php" method ="post">
+			<fieldset>
+			<legend>Information sur la tache</legend>	
+    <div>
+        <label for="titre">Titre:</label>
+        <input type="text" id="titre" name="titre">
+    </div>
+    <div>
+        <label for="tache"> Tache:</label>
+        <textarea type="text" id="tache" name="tache"> </textarea>
+    </div>
+    <div>
+           <label for= "day">Date de fin:</label>
+        <input type="date" name="dateline">
+
+
+    </div>
+
+  <div>
+      <input id="priority-low" name="priority" type="radio" value="priority-low">
+      <label for="priority-low">Basse</label>
+      <input id="priority-normal" name="priority" type="radio" value="priority-normal">
+      <label for="priority-normal">Normale</label>
+     <input id="priority-high" name="priority" type="radio" value="priority-high">
+     <label for="priority-high">Haute</label>
+    
+  </div>
+
+    <button type ="sumbit">Ajouter</button>
+  </fieldset>
+</form>
+
+
+</article>
+
+
+
+
+
+
+</body>
+</html>
