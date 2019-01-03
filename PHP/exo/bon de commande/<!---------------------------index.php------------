@@ -1,0 +1,219 @@
+<!---------------------------index.php-------------------------------------->
+
+<?php
+
+$pdo = new PDO('mysql:host=localhost;dbname=classicmodels', 'root', 'troiswa');
+
+$pdo->exec('SET NAMES UTF8');
+
+$query = $pdo->prepare
+(
+    'SELECT
+        orderNumber,
+        orderDate,
+        shippedDate,
+        status
+     FROM orders
+     ORDER BY orderDate'
+);
+
+$query->execute();
+
+$orders = $query->fetchAll(PDO::FETCH_ASSOC);
+
+//var_dump($orders);
+
+include 'index.phtml';
+
+
+?>
+
+
+
+
+
+<!---------------------------index.phtml-------------------------------------->
+
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>PHP</title>
+    <link rel="stylesheet" href="order-form.css">
+</head>
+<body>
+    <section>
+        <h1>Bons de commande</h1>
+
+        <table class="standard-table">
+            <caption>Liste des commandes</caption>
+            <thead>
+                <tr>
+                    <th>Commande</th>
+                    <th>Date de la commande</th>
+                    <th>Date de livraison</th>
+                    <th>Statut</th>
+                </tr>
+            </thead>
+            <tbody>
+            	<?php foreach($orders as $order): ?>
+                	<tr>
+                        <td>
+                            <a href="order-form.php?orderNumber=<?= $order['orderNumber'] ?>"><?= $order['orderNumber'] ?></a>
+                        </td>
+                        <td><?= $order['orderDate'] ?></td>
+                        <td><?= $order['shippedDate'] ?></td>
+                        <td><?= $order['status'] ?></td>
+                    </tr>
+                <?php endforeach ?>
+            </tbody>
+        </table>
+    </section>
+</body>
+</html>
+
+<!---------------------------order-form.php-------------------------------------->
+
+<?php
+
+$pdo = new PDO('mysql:host=localhost;dbname=classicmodels', 'root', 'troiswa');
+
+$pdo->exec('SET NAMES UTF8');
+
+$query = $pdo->prepare
+(
+	'SELECT
+        customerName,
+        contactFirstName,
+        contactLastName,
+        addressLine1,
+        addressLine2,
+        city
+     FROM customers
+     INNER JOIN orders ON orders.customerNumber = customers.customerNumber
+     WHERE orderNumber = ?'
+);
+
+$query->execute( [ $_GET['orderNumber'] ] );
+
+$customer = $query->fetch(PDO::FETCH_ASSOC);
+//var_dump($customer);
+
+
+$query = $pdo->prepare
+(
+	'SELECT
+        productName,
+        priceEach,
+        quantityOrdered,
+        (priceEach * quantityOrdered) AS totalPrice
+     FROM orderdetails
+     INNER JOIN products ON products.productCode = orderdetails.productCode
+     WHERE orderNumber = ?
+     ORDER BY orderLineNumber'
+
+);
+
+$query->execute(array($_GET['orderNumber']));
+
+$orderLines = $query->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+$query = $pdo->prepare
+(
+    'SELECT SUM(priceEach * quantityOrdered) AS totalAmount
+     FROM orderdetails
+     WHERE orderNumber = ?'
+);
+
+$query->execute(array($_GET['orderNumber']));
+
+$result = $query->fetch(PDO::FETCH_ASSOC);
+
+$totalAmount = $result['totalAmount'];
+
+
+
+include "order-form.phtml";
+
+?>
+
+<!---------------------------order-form.phtml-------------------------------------->
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>PHP</title>
+    <link rel="stylesheet" href="order-form.css">
+</head>
+<body>
+    <section>
+        <h1>Bons de commande</h1>
+
+        <a href="index.php">Retourner à l'accueil</a>
+        
+        
+         <article class="order-form-customer">
+            <h2><?= $customer['customerName'] ?></h2>
+            <h3><?= $customer['contactFirstName'] ?> <?= $customer['contactLastName'] ?></h3>
+            <p><?= $customer['addressLine1'] ?></p>
+            <p><?= $customer['addressLine2'] ?></p>
+            <p><?= $customer['city'] ?></p>
+        </article>
+        <hr>
+        <table class="standard-table">
+            <caption>Bon de commande n° <?= $_GET['orderNumber'] ?></caption>
+            <thead>
+                <tr>
+                    <th>Produit</th>
+                    <th class="money-column">Prix Unitaire</th>
+                    <th>Quantité</th>
+                    <th class="money-column">Prix Total</th>
+                </tr>
+            </thead>
+        	<tfoot>
+                <tr>
+                    <th colspan="3">Montant Total HT</th>
+                    <th><?= number_format($totalAmount, 2) ?> €</th>
+                </tr>
+                <tr>
+                    <th colspan="3">TVA (20 %)</th>
+                    <th><?= number_format($totalAmount * 0.20, 2) ?> €</th>
+                </tr>c
+                <tr>
+                    <th colspan="3">Montant Total TTC</th>
+                    <!-- Multiplier par 1.20 revient à ajouter 20% à une variable -->
+                    <th><?= number_format($totalAmount * 1.20, 2) ?> €</th>
+                </tr>
+            </tfoot>
+        	<tbody>
+                <?php foreach($orderLines as $orderLine): ?>
+                    <tr>
+                        <td><?= $orderLine['productName'] ?></td>
+                        <td class="money-column"><?= number_format($orderLine['priceEach'], 2) ?> €</td>
+                        <td><?= $orderLine['quantityOrdered'] ?></td>
+                        <td class="money-column"><?= number_format($orderLine['totalPrice'], 2) ?> €</td>
+                    </tr>
+                <?php endforeach ?>
+            </tbody>
+        </table>
+
+     </section>
+</body>
+</html>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+
+

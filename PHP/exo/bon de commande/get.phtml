@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <meta charset="utf-8">
+<head>
+	<title>votre commande</title>
+</head>
+  <h1>Bons de commande</h1>
+<body>
+  <a href="bondecommande.php">Retour à l'acceuil</a>
+  <p><?= $customer['customerName'] ?></p>
+  <p><?= $customer['contactLastName'] ?></p>
+  <p><?= $customer['contactFirstName']?></p>
+  <p><?= $customer['addressline1'] ?></p>
+  <p><?= $customer['city'] ?></p>
+
+<hr>
+
+ <table>
+      <caption>Bon de commande n° <?= $_GET['orderNumber'] ?></caption>
+            <thead>
+                <tr>
+                    <th>Produit</th>
+                    <th>Prix Unitaire</th>
+                    <th>Quantité</th>
+                    <th>Prix Total</th>
+                </tr>
+            </thead>
+        
+        
+        	<tbody>
+                <?php foreach($ordi as $ordre): ?>
+                    <tr>
+                        <td> <?= $ordre['productName'] ?> </td>
+                        <td> <?= $ordre['priceEach'] ?> €</td>
+                        <td> <?= $ordre['quantityOrdered'] ?> </td>
+                        <td> <?= $ordre['totalPrice'] ?> €</td>
+                    </tr>
+                <?php endforeach ?>
+            </tbody>
+        </table>
+
+
+
+</body>
+</html>
