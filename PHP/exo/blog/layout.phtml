@@ -1,0 +1,37 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Blog! Blog! Blog!</title>
+
+
+    <link rel="stylesheet" href="css/normalize-3.0.3.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans">
+    <link rel="stylesheet" href="css/blog-main.css">
+    <link rel="stylesheet" href="css/blog-theme.css">
+    <link rel="stylesheet" href="css/ui-button.css">
+    <link rel="stylesheet" href="css/ui-form.css">
+  
+</head>
+<body>
+  
+    <header class="blog-header">
+        <h1><a href="index.php"><i class="fa fa-microphone"></i> Encore un Blog ?! #nonMaisAllo</a></h1>
+        <nav>
+            <a href="admin.php"><i class="fa fa-cogs"></i> Administration</a>
+        </nav>
+    </header>
+
+    <main>
+        
+        <?php include $template.'.phtml' ?>
+    </main>
+
+
+    <footer class="blog-footer">
+        <small>Le blog des élèves de la 3W Academy</small>
+    </footer>
+</body>
+</html>

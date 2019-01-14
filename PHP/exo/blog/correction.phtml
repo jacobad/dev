@@ -1,0 +1,552 @@
+INSERT INTO Author (FirstName, LastName) VALUE ('Denis', 'Brogniart');
+
+
+<!------------------index.php---------------------------->
+
+<?php
+
+include 'application/bdd_connection.php';
+
+$query = $pdo->prepare(
+	' SELECT
+        Post.Id,
+        Title,
+        Contents,
+        CreationDate,
+        FirstName,
+        LastName
+    FROM
+        Post
+    INNER JOIN
+        Author
+    ON
+        Post.Author_Id = Author.Id
+    ORDER BY
+        CreationDate DESC'
+
+);
+
+$query->execute();
+$posts = $query->fetchAll(PDO::FETCH_ASSOC);
+
+
+$template = 'index';
+
+include 'layout.phtml';
+
+
+?>
+
+
+<!------------------layout.phtml---------------------------->
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Encore un Blog ?! #nonMaisAllo</title>
+
+    <!-- Feuilles de style externes -->
+    <link rel="stylesheet" href="css/normalize-3.0.3.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans">
+
+    <!-- Feuilles de style de l'application -->
+    <link rel="stylesheet" href="css/blog-main.css">
+    <link rel="stylesheet" href="css/blog-theme.css">
+    <link rel="stylesheet" href="css/ui-button.css">
+    <link rel="stylesheet" href="css/ui-form.css">
+</head>
+<body>
+    <!-- En-tête commune de l'application -->
+    <header class="blog-header">
+        <h1><a href="index.php"><i class="fa fa-microphone"></i> Encore un Blog ?! #nonMaisAllo</a></h1>
+        <nav>
+            <a href="admin.php"><i class="fa fa-cogs"></i> Administration</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Chargement du template PHTML spécifié par le programme PHP -->
+        <?php include $template.'.phtml' ?>
+    </main>
+
+    <!-- Pied de page commun de l'application -->
+    <footer class="blog-footer">
+        <small>Le blog des élèves de la 3W Academy</small>
+    </footer>
+</body>
+</html>
+
+
+<!------------------index.phtml---------------------------->
+
+
+<h2><i class="fa fa-home"></i> Accueil</h2>
+
+<ul class="post-list">
+    <?php foreach($posts as $post): ?>
+        <li class="post">
+            <h3>
+                <i class="fa fa-hand-o-right"></i>&nbsp;
+                <!-- Lien vers article de blog détaillé avec les commentaires -->
+                <a href="show_post.php?id=<?= $post['Id'] ?>" title="Consulter l'article">
+                    <?= htmlspecialchars($post['Title']) ?>
+                </a>
+            </h3>
+            <!-- Seul un extrait de l'article du blog est affiché -->
+            <article><?= substr(htmlspecialchars($post['Contents']), 0, 100) ?> [...]</article>
+            <small>
+                Rédigé par <?= htmlspecialchars($post['FirstName']) ?> <?= htmlspecialchars($post['LastName']) ?>
+                le <?= htmlspecialchars($post['CreationDate']) ?>
+            </small>
+        </li>
+    <?php endforeach; ?>
+</ul>
+
+
+<!------------------admin.php---------------------------->
+
+
+<?php
+
+
+
+
+$query = $pdo->prepare(
+	'SELECT
+            Post.Id,
+            Title,
+            Contents,
+            CreationDate,
+            FirstName,
+            LastName,
+            Category.Name AS Category_Name
+        FROM
+            Post
+        INNER JOIN
+            Author
+        ON
+            Post.Author_Id = Author.Id
+        INNER JOIN
+            Category
+        ON
+            Post.Category_Id = Category.Id
+        ORDER BY
+            CreationDate DESC'
+	);
+
+$query->execute();
+$posts = $query->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+$template = 'admin';
+
+include 'layout.phtml';
+
+
+
+?>
+
+<!------------------admin.phtml---------------------------->
+
+
+<h2><i class="fa fa-cogs"></i> Panneau d'administration</h2>
+
+<nav>
+    <a href="add_post.php">Rédiger un nouvel article</a>
+</nav>
+
+<table>
+    <caption>Liste des articles</caption>
+    <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Article</th>
+            <th>Auteur</th>
+            <th>Catégorie</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+     	<?php foreach($posts as $post): ?>
+            <tr>
+                <td><a href="show_post.php?id=<?= intval($post['Id']) ?>" target="_blank"><?= htmlspecialchars($post['Title']) ?></a></td>
+                <td><?= substr(htmlspecialchars($post['Contents']), 0, 200) ?></td>
+                <td><?= htmlspecialchars($post['FirstName']) ?> <?= htmlspecialchars($post['LastName']) ?></td>
+                <td><?= htmlspecialchars($post['Category_Name']) ?></td>
+                <td>
+                    <a class="edit" href="edit_post.php?id=<?= intval($post['Id']) ?>"><i class="fa fa-pencil"></i></a>
+                    <a class="remove" href="delete_post.php?id=<?= intval($post['Id']) ?>"><i class="fa fa-remove"></i></a>
+                </td>
+            </tr>
+        <?php endforeach ?>
+     
+    </tbody>
+</table>
+
+
+
+<!------------------add_post.php---------------------------->
+<?php
+
+
+
+include 'application/bdd_connexion.php';
+
+$query = $pdo->prepare(
+	    'SELECT
+	        *
+	     FROM Author'
+);
+
+$query->execute();
+$authors = $query->fetchAll(PDO::FETCH_ASSOC);
+
+
+$query = $pdo->prepare(
+	    'SELECT
+	        *
+	     FROM Category'
+);
+
+$query->execute();
+$categories = $query->fetchAll(PDO::FETCH_ASSOC);
+
+if (empty($_POST) == false) {
+	
+	var_dump($_POST);
+    $title = $_POST['title'];
+    $content = $_POST['contents'];
+    $author_id = $_POST['author'];
+    $category_id = $_POST['category'];
+    
+    $query = $pdo->prepare
+	(
+	    '
+            INSERT INTO
+                Post
+                (Title, Contents, Author_Id, Category_Id, CreationDate)
+            VALUES
+                (?, ?, ?, ?, NOW())
+        '
+
+	);
+    
+    $query->execute( [ $title, , $content, $author_id, $category_id ] );
+    
+    header('Location: index.php');
+    exit();
+    
+
+}
+
+
+
+
+$template = 'add_post';
+
+include 'layout.phtml';  
+
+
+?>
+
+
+<!------------------add_post.phtml---------------------------->
+
+<h2><i class="fa fa-pencil"></i> Rédiger un nouvel article</h2>
+
+<form class="generic-form" action="add_post.php" method="post">
+    <fieldset>
+        <legend><i class="fa fa-sticky-note-o"></i> Nouvel article</legend>
+        <ul>
+            <li>
+                <label for="title">Titre :</label>
+                <input type="text" id="title" name="title">
+            </li>
+            <li>
+                <label class="textarea" for="contents">Article :</label>
+                <textarea id="contents" name="contents" rows="15"></textarea>
+            </li>
+            <li>
+                <label for="author">Auteur :</label>
+                <select id="author" name="author">
+                   <?php foreach ($authors as $author): ?>
+                        <option value="<?=$author['Id']?>"><?= $author['FirstName'].' '.$author['LastName']?></option>
+                    <?php endforeach ?>
+                </select>
+            </li>
+            <li>
+                <label for="category">Catégorie :</label>
+                <select id="category" name="category">
+                    <?php foreach ($categories as $category): ?>
+                        <option value="<?=$category['Id']?>"><?= $category['Name']?></option>
+                    <?php endforeach ?>
+                </select>
+            </li>
+            <li>
+                <button class="button button-primary" type="submit">Enregistrer</button>
+                <a class="button button-cancel" href="index.php">Annuler</a>
+            </li>
+        </ul>
+    </fieldset>
+</form>
+
+
+<!----------------- application/bdd_connexion.php------------------->
+
+<?php
+
+	$pdo = new PDO('mysql:host=localhost;dbname=blog2', 'root', 'troiswa');
+
+	$pdo->exec('SET NAMES UTF8');
+
+
+?>
+
+
+<!----------------- show_post.php------------------->
+
+<?php
+
+if(array_key_exists('id', $_GET) == false || ctype_digit($_GET['id']) == false) {
+    header('Location: index.php');
+    exit();
+}
+
+include 'application/bdd_connection.php';
+
+
+$query = $pdo->prepare(
+	' SELECT
+            Post.Id,
+            Title,
+            Contents,
+            CreationDate,
+            FirstName,
+            LastName
+        FROM
+            Post
+        INNER JOIN
+            Author
+        ON
+            Post.Author_Id = Author.Id
+        WHERE
+            Post.Id = ?'
+	);
+
+$query->execute( [ $_GET['id'] ] );
+$post = $query->fetch(PDO::FETCH_ASSOC);
+
+$query = $pdo->prepare(
+	'SELECT
+            Pseudo,
+            Contents,
+            CreationDate
+        FROM
+            Comment
+        WHERE
+            Post_Id = ?'
+	);
+    
+$query->execute( [ $_GET['id'] ] );  
+$comments = $query->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+$template = "show_post";
+
+include 'layout.phtml';
+
+
+?>
+
+
+
+<!----------------- show_post.phtml------------------->
+
+<h2><i class="fa fa-file-text-o"></i> Article</h2>
+
+<section class="post">
+    <h3><?= htmlspecialchars($post['Title']) ?></h3>
+    <article><?= htmlspecialchars($post['Contents']) ?></article>
+    <small>
+        Rédigé par <?= htmlspecialchars($post['FirstName']) ?> <?= htmlspecialchars($post['LastName']) ?>
+        le <?= htmlspecialchars($post['CreationDate']) ?>
+    </small>
+</section>
+
+<hr>
+<ul class="comment-list">
+    <?php foreach($comments as $comment): ?>
+        <li class="comment">
+            <h4><i class="fa fa-comment"></i> Rédigé par <?= htmlspecialchars($comment['Pseudo']) ?></h4>
+            <article><?= htmlspecialchars($comment['Contents']) ?></article>
+        </li>
+    <?php endforeach; ?>
+</ul>
+
+<hr>
+
+<form class="generic-form" action="add_comment.php" method="POST">
+
+    <input type="hidden" name="postId" value="<?= $_GET['id'] ?>">
+
+    <fieldset>
+        <legend><i class="fa fa-comment-o"></i> Nouveau commentaire</legend>
+        <ul>
+            <li>
+                <label for="nickName">Pseudo :</label>
+                <input type="text" id="nickName" name="nickName">
+            </li>
+            <li>
+                <label class="textarea" for="contents">Commentaire :</label>
+                <textarea id="contents" name="contents" rows="5"></textarea>
+            </li>
+            <li>
+                <button class="button button-primary" type="submit">Ajouter</button>
+                <a class="button button-cancel" href="index.php">Annuler</a>
+            </li>
+        </ul>
+    </fieldset>
+</form>
+
+
+<!----------------- add_comment.php------------------->
+<?php
+
+include 'application/bdd_connection.php';
+
+
+$query = $pdo->prepare(
+	' INSERT INTO
+            Comment
+            (Pseudo, Contents, Post_Id, CreationDate)
+        VALUES
+            (?, ?, ?, NOW())'
+	);
+
+$query->execute( [ $_POST['nickName'], $_POST['contents'], $_POST['postId'] ] );
+
+header('Location: show_post.php?id='.$_POST['postId']);
+exit();
+
+
+?>
+
+
+
+<!----------------- edit_post.php------------------->
+<?php
+
+include 'application/bdd_connection.php';
+
+if(empty($_POST) == true){
+	if(!array_key_exists('id', $_GET) OR !ctype_digit($_GET['id'])){
+            header('Location: admin.php');
+            exit();
+    }
+
+	$query = $pdo->prepare(
+	'SELECT
+                Id,
+                Title,
+                Contents
+            FROM
+                Post
+            WHERE
+             	iD=?'
+     );
+      
+     $query->execute( [ $_GET['id'] ] );
+	 $post = $query->fetch(PDO::FETCH_ASSOC);
+     
+     $template = 'edit_post';
+	 include 'layout.phtml';
+
+} else {
+
+	$query = $pdo->prepare(
+		'UPDATE
+	        Post
+	     SET
+	        Title = ?,
+	        Contents = ?
+	     WHERE
+	        Id = ?'
+	);
+    
+    $query->execute( [ $_POST['title'], $_POST['contents'], $_POST['postId'] ] );
+    
+	header('Location: admin.php');
+    exit();
+}
+
+
+
+
+
+?>
+
+
+
+
+<!----------------- edit_post.phtml------------------->
+
+<form class="generic-form" action="edit_post.php" method="post">
+
+    <!-- Utilisation d'un champ caché pour spécifier à quel article rattacher le commentaire -->
+    <input type="hidden" name="postId" value="<?= $_GET['id'] ?>">
+
+    <fieldset>
+        <legend><i class="fa fa-sticky-note-o"></i> Article</legend>
+        <ul>
+            <li>
+                <label for="title">Titre :</label>
+                <input type="text" id="title" name="title" value="<?= htmlspecialchars($post['Title']) ?>">
+            </li>
+            <li>
+                <label class="textarea" for="contents">Article :</label>
+                <textarea id="contents" name="contents" rows="15"><?= htmlspecialchars($post['Contents']) ?></textarea>
+            </li>
+            <li>
+                <button class="button button-primary" type="submit">Mettre à jour</button>
+                <a class="button button-cancel" href="index.php">Annuler</a>
+            </li>
+        </ul>
+    </fieldset>
+</form>
+
+<!----------------- delete_post.php------------------->
+<?php
+
+if(!array_key_exists('id', $_GET) OR !ctype_digit($_GET['id'])){
+     header('Location: admin.php');
+     exit();
+}
+
+include 'application/bdd_connection.php';
+
+$query = $pdo->prepare(
+	'DELETE FROM Post WHERE Id= ?'
+);
+
+$query->execute( [ $_GET['id'] ] );
+
+$query = $pdo->prepare(
+	'DELETE FROM Comment WHERE Post_Id= ?'
+);
+
+$query->execute( [ $_GET['id'] ] );
+
+header('Location: admin.php');
+exit();
+
+
+?>
+
+
+
+
+

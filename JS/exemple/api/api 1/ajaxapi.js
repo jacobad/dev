@@ -7,6 +7,9 @@ function search(response){
   $('#affi ul').append('<li id="jacob" data-id='+response.results[i].id+'>'+response.results[i].title+'</li>');
   } 
 }
+function movieDetails(response){
+		
+}
 /*function MyList(response){
      $('#target').empty();
      $('#target').append('<ul>');
