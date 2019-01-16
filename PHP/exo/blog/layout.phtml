@@ -20,7 +20,16 @@
     <header class="blog-header">
         <h1><a href="index.php"><i class="fa fa-microphone"></i> Encore un Blog ?! #nonMaisAllo</a></h1>
         <nav>
-            <a href="admin.php"><i class="fa fa-cogs"></i> Administration</a>
+        <?php if (array_key_exists('Role', $_SESSION) == false ): ?>
+            <a href="login.php"><i class="fa fa-cogs"></i> Login </a>
+            <a href="register.php"><i class="fa fa-cogs"></i> Register </a>
+       <?php else :?>
+            <a href="logout.php"><i class="fa fa-cogs"></i> Logout</a>
+            <?php if ($_SESSION['Role'] == 'admin') { ?>
+                <a href="admin.php"><i class="fa fa-cogs"></i> Administration</a>
+            <?php } ?>
+       <?php endif ?>
+
         </nav>
     </header>
 
