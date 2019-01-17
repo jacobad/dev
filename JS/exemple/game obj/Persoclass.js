@@ -10,8 +10,8 @@ var Perso = function(name, hp, attack, defense, magie) {
 
 Perso.prototype.attaquer = function(perso) {
 
-	var degats = this.attack - perso.defense;
-
+	var degats = this.attack-perso.defense;
+	console.log(perso);
 	if (degats < 10) {
 		
 		console.log(perso.name +'ne sent plus rien....' );
