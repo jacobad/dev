@@ -1,0 +1,47 @@
+    .slate {
+    	border: 1px solid black;
+    }
+    h1{
+    	color:magenta;
+    	text-align: center;
+    }
+    /*div des couleurs*/
+    .pen-color
+    {
+    
+    display: inline-block;
+    height: 1em;
+    top: 0.5em;
+    width: 2em;
+    border-radius: 1em;
+    margin-left: 1em;
+
+	}
+	.pen-color.black{
+		background-color: black;
+	}
+	.pen-color.blue
+	{
+	    background-color: #0378A6;
+	}
+	.pen-color.green
+	{
+	    background-color: #13B813;
+	}
+	.pen-color.maroon
+	{
+	    background-color: #5C2121;
+	}
+	.pen-color.red
+	{
+	    background-color: #B9121B;
+	}
+	.pen-color.seagreen
+	{
+	    background-color: #029E9A;
+	}
+	.pen-color.yellow
+	{
+	    background-color: #FFBD07;
+	}
+
