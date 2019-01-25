@@ -51,6 +51,7 @@ Slate.prototype.getMouseLocation = function(event)
         this.context.beginPath();
         this.context.moveTo(this.currentLocation.x, this.currentLocation.y);
         this.context.lineTo(location.x, location.y);
+        this.context.closePath();
         this.context.stroke();
         
         this.currentLocation = location;
@@ -59,7 +60,12 @@ Slate.prototype.getMouseLocation = function(event)
  
  }
  
-  Slate.prototype.onMouseUpAndLeave = function(event) {
+  Slate.prototype.onMouseUp = function(event) {
   
   	this.isDrawing = false;
   }
+
+Slate.prototype.onMouseLeave = function(event) {
+
+    this.isDrawing = false;
+};

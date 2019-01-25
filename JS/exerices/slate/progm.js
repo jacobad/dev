@@ -30,5 +30,5 @@ Program.prototype.onClickPenColor = function(event) {
 
 	var color = event.currentTarget.dataset.color;
 
-	this.pen.color = color;
-}
+	this.pen.color = pencolor;
+};
