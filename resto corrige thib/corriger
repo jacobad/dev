@@ -1,0 +1,208 @@
+<!------ controllers/meal/MealController.class.php --->
+
+<?php
+
+class MealController
+{
+    public function httpGetMethod(Http $http, array $queryFields)
+    {
+    	// index.php/meal?id=3
+      
+        if(array_key_exists('id', $_GET) == true && ctype_digit($_GET['id']) == true)
+        {
+        	$mealModel = new MealModel();
+            $meal      = $mealModel->find($_GET['id']);
+            
+            $http->sendJsonResponse($meal);
+        
+        } else {
+        
+        	$http->redirectTo('/');
+        
+        }
+    }
+
+    public function httpPostMethod(Http $http, array $formFields)
+    {
+    
+    }
+}
+
+
+?>
+
+<!------ model/MealModel.class.php --->
+
+<?php
+
+class MealModel {
+
+	public function listAll() {
+        $database = new Database();
+
+        $sql = 'SELECT * FROM Meal';
+
+        return $database->query($sql);
+    }
+
+	public function find($mealId)
+    {
+        $database = new Database();
+
+        $sql = 'SELECT
+                    *
+                FROM Meal
+                WHERE Id = ?';
+
+        // Récupération du produit alimentaire spécifié.
+        return $database->queryOne($sql, [ $mealId ]);
+    }
+
+}
+
+?>
+
+
+<!------ controllers/order/OrderController.class.php --->
+
+
+<?php
+
+class OrderController
+{
+    public function httpGetMethod(Http $http, array $queryFields)
+    {
+  		if(array_key_exists('user', $_SESSION) == false) {
+
+    		$http->redirectTo('/user/login');
+    	}
+        
+        $mealModel = new MealModel();
+        $meals     = $mealModel->listAll();
+        
+       return
+		[
+			'meals' => $meals
+		];
+    }
+
+    public function httpPostMethod(Http $http, array $formFields)
+    {
+    
+    }
+}
+
+?>
+
+
+
+
+
+
+
+
+
+<!--------- www/order/OrderView.phtml -------->
+
+
+
+<h2><i class="fa fa-shopping-cart"></i> Passer une commande</h2>
+
+<form data-order-step="run" id="order-form" class="generic-form">
+
+    <!-- Champ caché stockant le prix de vente du produit alimentaire sélectionné -->
+    <input type="hidden" name="salePrice">
+
+
+    <fieldset>
+        <legend>Ajouter un article</legend>
+        <ul>
+            <li>
+                <label for="meal">Nom :</label>
+                <select id="meal" name="meal">
+                 <?php foreach($meals as $meal): ?>
+                        <option value="<?= $meal['Id'] ?>"><?= $meal['Name'] ?></option>
+                 <?php endforeach; ?>
+                </select>
+                <article id="meal-details" class="meal-details no-left-label">
+                    <img src="" alt="Photo du produit">
+                    <p ></p>
+                    <span>Prix : <strong></strong> €</span>
+                </article>
+            </li>
+            <li>
+                <label for="quantity">Quantité :</label>
+                <input id="quantity" class="quantity" type="text" maxlength="2" name="quantity" data-name="Quantité" data-type="positive-integer" data-required>
+            </li>
+            <li>
+                <button class="button button-primary no-left-label" type="submit">Ajouter</button>
+            </li>
+        </ul>
+    </fieldset>
+
+    <fieldset>
+        <legend>Récapitulatif de la commande</legend>
+        <section id="order-summary"></section>
+    </fieldset>
+</form>
+
+<ul class="link-list">
+    <li>
+        <a href="<?= $requestUrl ?>/order/payment?id=<?=$_SESSION['user']['userId']?>"></a><button   class="button button-primary">Valider la commande</button></a>
+        <a class="button button-cancel small" href="<?= $requestUrl ?>">Annuler</a>
+    </li>
+</ul>
+
+
+<!-- Classes de gestion du formulaire de commande -->
+<!-- Ce code JavaScript n'est chargé QUE depuis l'URL /order/payment/success -->
+<script src="<?= $wwwUrl ?>/js/classes/BasketSession.class.js"></script>
+<script src="<?= $wwwUrl ?>/js/classes/OrderForm.class.js"></script>
+
+
+
+
+
+
+<!------ www/js/classes/OrderFprm.class.js --->
+<script>
+'use strict';
+
+
+var OrderForm = function()
+{
+	this.onChangeMeal();
+	$('#meal').on('change', this.onChangeMeal.bind(this));
+}
+
+OrderForm.prototype.onChangeMeal = function(event)
+{
+
+	var mealId = $('#meal').val();
+    console.log(getRequestUrl() + '/meal?id=' + mealId);
+    
+    $.getJSON( getRequestUrl() + '/meal?id=' + mealId, this.onAjaxChangeMeal);  
+}
+
+OrderForm.prototype.onAjaxChangeMeal = function(response)
+{
+	console.log(response);
+    
+    var imageUrl = getWwwUrl() + '/images/meals/' + response.Photo;
+
+    $('#meal-details p').text(response.Description);
+    $('#meal-details strong').text(parseFloat(response.SalePrice).toFixed(2));
+    $('#meal-details img').attr('src', imageUrl);
+
+}
+
+</script>
+
+<!------ www/js/main.js --->
+
+
+<script>
+
+var order = new OrderForm();
+console.log(order);
+</script>
