@@ -1,62 +1,11 @@
-
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>3WA Restaurant</title>
-
-    <link rel="stylesheet" href="/Restaurant (corrigé)/application/www/css/normalize-3.0.3.min.css">
-    <link rel="stylesheet" href="/Restaurant (corrigé)/application/www/css/font-awesome-4.3.0.min.css">
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Oleo+Script+Swash+Caps|Karla">
-
-    <!-- Feuilles de styles de l'application -->
-    <link rel="stylesheet" href="/Restaurant (corrigé)/application/www/css/3wa-resto.css">
-    <link rel="stylesheet" href="/Restaurant (corrigé)/application/www/css/ui-button.css">
-    <link rel="stylesheet" href="/Restaurant (corrigé)/application/www/css/ui-form.css">
-    <link rel="stylesheet" href="/Restaurant (corrigé)/application/www/css/ui-table.css">
-
-    <!-- Librairie jQuery -->
-    <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
-    <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-
-    <!-- JavaScript de l'application -->
-    <script src="/Restaurant (corrigé)/application/www/js/utilities.js"></script>
-    <script src="/Restaurant (corrigé)/application/www/js/classes/FormValidator.class.js"></script>
-</head>
-<body>
-
-    <!-- En-tête commune -->
-    <header>
-        <h1>
-            <a href="<?= $requestUrl ?>/order/">"
-                <img src="/Restaurant (corrigé)/application/www/images/logo.gif" height="63" width="57" alt="3WA Restaurant">Restaurant - Made In America !
-            </a>
-        </h1>
-    </header>
-
-    <!-- Interface utilisateur -->
-    <nav class="user-interface">
-        <ul class="link-list">
-                            <li>
-                    <a class="button button-primary" href="/Restaurant (corrigé)/index.php/booking">Réserver</a>
-                    <a class="button button-primary" href="/Restaurant (corrigé)/index.php/order">Commander</a>
-                </li>
-                <li class="layout-right">
-                    <p class="welcome">Bonjour <strong>Thibaut Monesma</strong> !</p>
-                    <a class="button button-primary" href="/Restaurant (corrigé)/index.php/user/logout">Déconnexion</a>
-                </li>
-                    </ul>
-    </nav>
-
-    <main>
+<main>
         <!-- Affichage du template lié à la vue -->
         <h2><i class="fa fa-shopping-cart"></i> Passer une commande</h2>
 
-<form data-order-step="run" id="order-form" class="generic-form hidden">
+<form data-order-step="run" id="order-form" class="generic-form hidden" style="display: block;">
 
     <!-- Champ caché stockant le prix de vente du produit alimentaire sélectionné -->
-    <input type="hidden" name="salePrice">
+    <input type="hidden" name="salePrice" value="3">
 
     <aside class="error-message hidden">
         <h3><i class="fa fa-warning"></i> Il y a <em class="total-error-count">1</em> erreur(s) dans le formulaire !</h3>
@@ -68,7 +17,7 @@
         <ul>
             <li>
                 <label for="meal">Nom :</label>
-                <select id="meal" name="meal">
+                <select id="selectMeal" name="meal">
                     <?php foreach ($names as $name){ ?>
                         
                         <option value="<?=$name['Id']?>"><?=$name['Name'] ?></option>
@@ -76,53 +25,61 @@
                     <?php } ?>
                 </select>
 
-                                    </select>
-                <article id="meal-details" class="meal-details no-left-label">
-                    <img src="" alt="Photo du produit">
-                    <p></p>
-                    <span>Prix : <strong></strong></span>
+                <article id="meal_details" class="meal-details no-left-label">
+                    <img id="imgMealDetails" src="" alt="Photo du produit">
+                    <p id="nameMealDetails"></p>
+                    <p id="descriptionMealDetails"></p>
+                    <span>Prix : <strong id="prixMealDetails"></strong></span>
                 </article>
             </li>
             <li>
                 <label for="quantity">Quantité :</label>
-                <input id="quantity" class="quantity" type="text" maxlength="2" name="quantity" data-name="Quantité" data-type="positive-integer" data-required>
+                <input id="quantityInput" class="quantity" type="text" maxlength="2" name="quantity" data-name="Quantité" data-type="positive-integer" data-required="">
             </li>
             <li>
-                <button class="button button-primary no-left-label" type="submit">Ajouter</button>
+                <button id="buttonAddOrder" class="button button-primary no-left-label" type="submit">Ajouter</button>
             </li>
         </ul>
     </fieldset>
 
     <fieldset>
         <legend>Récapitulatif de la commande</legend>
-        <section id="order-summary"></section>
+        <section id="order-summary">
+        <table class="generic-table">
+            <?php if (isset($_GET['quantity']) && $_GET['quantity'] > 0){ ?> 
+                <thead>
+                    <tr>
+                        <th class="number">Quantité</th>
+                        <th>Produit</th>
+                        <th class="number">Prix Unitaire</th>
+                        <th class="number">Prix Total</th>
+                        <th></th>
+                    </tr>
+                </thead>
+            <?php } ?>
+
+            <tbody id="recapOrder">
+            <?php if (isset($_GET['quantity']) == false || $_GET['quantity'] == 0){ ?>
+                <tr>
+                    <td class="basket-empty"> le panier est vide ACHETE CONSOMME !</td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+    </section>
     </fieldset>
 </form>
 
 <ul class="link-list">
     <li>
-        <a href="#"></a><button   class="button button-primary">Valider la commande</button></a>
-        <a class="button button-cancel small" href="/Restaurant (corrigé)/index.php">Annuler</a>
+        <a href="<?=$requestUrl?>/order/payment?id=28"></a><button  class="button button-primary">Valider la commande</button>
+        <a class="button button-cancel small" href="<?=$requestUrl?>">Annuler</a>
     </li>
 </ul>
 
 
 <!-- Classes de gestion du formulaire de commande -->
-<!-- Ce code JavaScript n'est chargé QUE depuis l'URL /order/payment/success -->
-<script src="/Restaurant (corrigé)/application/www/js/classes/BasketSession.class.js"></script>
-<script src="/Restaurant (corrigé)/application/www/js/classes/OrderForm.class.js"></script>    </main>
-
-    <!-- Pied de page commun -->
-    <footer>
-        <ul class="link-list">
-            <li><img src="/Restaurant (corrigé)/application/www/images/payment/visa.png" alt="Visa"></li>
-            <li><img src="/Restaurant (corrigé)/application/www/images/payment/mastercard.png" alt="MasterCard"></li>
-            <li><img src="/Restaurant (corrigé)/application/www/images/payment/paypal.png" alt="PayPal"></li>
-        </ul>
-        <small>Réalisé avec <i class="fa fa-heart"></i>&nbsp; par les élèves de la 3W Academy</small>
-    </footer>
-
-    <!-- Code principal JavaScript de l'application -->
-    <script src="/Restaurant (corrigé)/application/www/js/main.js"></script>
-</body>
-</html>
+<!-- Ce code JavaScript n'est chargé QUE depuis l'URL /order/payment/success -->    
+</main>
+<script src="<?=$wwwUrl?>/js/classes/order/basket.js"></script>
+<script src="<?=$wwwUrl?>/js/classes/order/order.js"></script>

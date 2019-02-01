@@ -8,7 +8,7 @@ class OrderController
         if ($_SESSION == null){
 
             $http = new Http();
-            $http->redirectTo('/user/login');
+            $http->redirectTo('/order');
         }
             $data = new MealModel();
             $dataMeal = $data -> showDataMeal();

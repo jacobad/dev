@@ -12,7 +12,7 @@ class HomeController
     	 */    
 
        $mealModel = new MealModel();
-       $meals = $mealModel-> listAll();
+       $meals = $mealModel-> showDataMeal();
 
        
 
