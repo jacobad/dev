@@ -13,6 +13,4 @@
 
 var order = new OrderForm();
 
-order.showJSON();
-order.getJsonSelected();
-order.showRecap();
+
