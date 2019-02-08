@@ -1,10 +1,10 @@
 'use strict';
 var OrderForm = function (){
-    console.log('ici');
+    
     this.getJsonSelected();
     $('#selectMeal').on('change',this.getJsonSelected.bind(this));
     $('#buttonAddOrder').on('click', this.showRecap.bind(this));
- 
+ console.log('ici');
     this.basket = new Basket();
 
 }

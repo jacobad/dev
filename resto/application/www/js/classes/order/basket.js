@@ -13,33 +13,48 @@ var Basket = function (){
         if (this.basket == null ) {
             this.basket = [];
         }
-        for(var index = 0; index < this.basket.length; index++){
+       
+    } 
+
+    Basket.prototype.addProducts = function(mealId, name, quantity, salePrice, img){
+
+        
+
+            this.basket.push({
+
+            //'name' : $('#nameMealDetails').text(),
+            //'priceU' : $('#priceMealDetails').text()
+        mealId    = parseInt(mealId);
+        quantity  = parseInt(quantity);
+        salePrice = parseFloat(salePrice);
+        
+        
+        if(isNaN(quantity) == false) {
+        
+       for(var index = 0; index < this.items.length; index++){
+
+             if(this.items[index].mealId == mealId){
+                this.items[index].quantity += quantity;
+                this.save();
+                this.build();
+                return;
+
+             }
+             for(var index = 0; index < this.basket.length; index++){
 
              if(this.basket[index].mealId == mealId){
                 this.basket[index].quantity += quantity;
                 return;
 
              }
-
-
-    } 
-
-    Basket.prototype.addProducts = function(){
-
-        
-
-            this.basket.push({
-
-            'name' : $('#nameMealDetails').text(),
-            'priceU' : $('#priceMealDetails').text()
     
-            });
+            };
 
             saveDataToDomStorage('panier', this.basket);
         
 
-
-    }
+}
+   
     /*
     'use strict';
 
