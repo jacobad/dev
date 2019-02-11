@@ -1,0 +1,95 @@
+body{
+max-width: 100%;
+max-height:100%;
+}
+/*...........header...........*/
+
+header{
+  background-color:beige;
+  text-align: center;
+  display:block;
+}
+/**********NAV***********************/
+
+.containernav h1{
+  color:purple;
+}
+
+
+/*..........SECTION COLOR...........*/
+
+
+.containercolumn{
+  width: 100px;
+}
+.parent {
+  display: flex;
+  flex-flow:column;
+  flex-wrap:wrap;
+  height:100px;
+  width: 100px;
+}
+#colonne1, #colonne2, #colonne3 {
+  width: auto;
+  box-sizing:border-box;
+}
+#colonne1, #colonne3 {
+  height:auto;
+}
+#colonne2 {
+  height: auto;
+  border: 2px solid red;
+}
+#colonne1 {
+  border: 2px solid yellow;
+}
+#colonne3 {
+  border: 2px solid grey;
+  }
+
+/* ............ footer .......................*/ 
+
+
+form {
+  
+  margin: 0 auto;
+  width: 400px;
+  padding: 1em;
+  border: 1px solid;
+  border-radius:1em;
+}
+
+form div + div {
+  margin-top: 1em;
+}
+
+label {
+  display: inline-block;
+  width: 90px;
+  text-align: right;
+}
+
+input, textarea {
+
+  font: 1em sans-serif;
+  width: 200px;
+  box-sizing: border-box;
+  border: 1px solid;
+}
+
+input:focus, textarea:focus {
+  border-color:black;
+}
+
+textarea {
+  vertical-align: top;
+  height: 5em;
+}
+
+.button {
+  padding-left: 90px;
+}
+
+button {
+  margin-left:5em;
+}
