@@ -1,6 +1,10 @@
-body{
-max-width: 100%;
-max-height:100%;
+html {
+  height: 100%;
+}
+body {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
 }
 /*...........................header.....................*/
 
@@ -9,6 +13,8 @@ header{
   text-align: center;
   display:block;
   font-family: 'Fahkwang', sans-serif;
+  margin: auto;
+
 }
 /**********NAV*********/
 
@@ -18,9 +24,22 @@ header{
 a{
   text-decoration: none;
   color:grey;
-  margin-right: 2em;
+  margin-right: 5em;
+}
+nav{
+  margin-bottom:2em;
 }
 
+
+
+#invisible{
+  display:none;
+  background-color: beige;
+}
+#invisibles{
+  display:none;
+  background-color:beige;
+}
 /***nav color items****/
 i{
  margin-right:1em;
@@ -35,7 +54,9 @@ i{
 .fa-linkedin{
   color:#0076b1;
 }
-
+span{
+  color:red;
+}
 /*.........................MAIN...........................*/
 
 
@@ -43,130 +64,58 @@ i{
 /*..........SECTION COLOR...........*/
 
 
-/*.containercolumn{
-  width: 100px;
-}
-.parent {
-  display: flex;
-  flex-flow:column;
-  flex-wrap:wrap;
-  height:100px;
-  width: 100px;
-}
-#colonne1, #colonne2, #colonne3 {
-  width: auto;
-  box-sizing:border-box;
-}
-#colonne1, #colonne3 {
-  height:auto;
-}
-#colonne2 {
-  height: auto;
-  border: 2px solid red;
-}
-#colonne1 {
-  border: 2px solid yellow;
-}
-#colonne3 {
-  border: 2px solid grey;
-}*/
 
-div#Me 
+a#col1 
 {
   float: left;
-  width: 256px;
+  width: 260px;
   margin: 0;
   padding: 0;
   border: 1px opacity #000;
   border-radius:5px;
   background:#72616d;
+  min-height:90vh;
 }
 
-#Me:hover{
-background-color:filter:brightness(50%);
+#col1:hover{
+background-colo:#696;
 }
 
-div#Projects 
+a#col3 
 {
   float: right;
   width: 256px;
-  margin: 0 10px 0 0;
+  margin: 0 5px 0 0;
   padding: 0;
   border: 1px opacity #000;
   border-radius:5px;
   background:#eb846c;
+  min-height:90vh;
 }
 
-#Projects:hover{
-background-color:yellow;
+#col3:hover{
+background-coloryellow;
 }
 
-div#Skills 
+a#col2
 { 
-  margin: 0 270px 0 260px;
+  margin: auto;
   padding: 0;
   border: 1px opacity #000;
   border-radius:5px;
   background:#0c528b;
+  min-height:90vh;
 }
-#Skills:hover{
-background-color:red;
-}
-
-
-
-
-
-
-
-
-/* Morph */
-
-
-.morp div {
-  width: 200px;
-  height: 150px;
-  -webkit-filter: grayscale(0) blur(0px);
-  filter: grayscale(0) blur(0px);
-  -webkit-transition: all 0.8s ease;
-  transition: all 0.8s ease;
-}
- 
-.morp div:hover{
-  width: 150px; /* on affiche l'image au carré */
-  height: 150px;
-  border-radius: 50%;  /* on arrondit l'image */
-  -webkit-transform: rotate(360deg); /* rotation de l'image */
-  transform: rotate(360deg);
+a#col2:hover{
+background-colo:red;
 }
 
 
-figure {
-  width:300px;
-  border:5px ridge grey;
-  position:relative;
+
+.clear{
+  clear:both;
 }
 
-img {
-  width:100%;
-  vertical-align:top;
-}
-
-figcaption {
-opacity:0;
-background-color:red;
-text-align:center;
-position:absolute;
-bottom:0;
-left:0;
-right:0;
-border-radius: 15px;
-}
-
-figure:hover figcaption {
-transition:all 1.5s;
-  opacity:1;
-}
 
 
 
@@ -178,7 +127,21 @@ transition:all 1.5s;
 
 /* ............ footer .......................*/ 
 
+            /******form toggle*******/
+ #toggle{
+  height:auto; background:#eee;  
+  margin:1em;
+  text-align:center;
+}
+#toggle p{
+  text-align:center;
+  padding:0;
+}
 
+
+footer{
+  text-align: center;
+}
 form {
   
   margin: 0 auto;
@@ -221,4 +184,8 @@ textarea {
 
 button {
   margin-left:5em;
+}
+#click{
+  margin-top:1em;
+  border-radius:3em;
 }

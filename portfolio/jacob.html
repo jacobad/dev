@@ -4,6 +4,7 @@
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 		<link href="https://fonts.googleapis.com/css?family=Fahkwang" rel="stylesheet">
+		<script src='https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js'></script>
 		<link rel="stylesheet" type="text/css" href="jacob.css">
 		<title>porto</title>
 	</head>
@@ -14,17 +15,17 @@
 				   	
  <a href='javascript: qsj()'>Qui suis-je</a>
 
-					<div style='display:none;' id='invisible'>
+					<div id='invisible'>
 					   <h1>HELLO C'EST BIBI!!!</h1>
 
-					<p>Salut c'est jaja alors j'aime la nature les animaux et sortir avec mes amis dans les magasins Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto mollitia expedita dolorem deleniti eligendi illum, nulla itaque facilis dolores <span> earum magnam illo, asperiores similique tempore aliquam voluptatibus </span> atque! Placeat, vero.</p>
+						<p>Salut c'est jaja alors j'aime la nature les animaux et sortir avec mes amis dans les magasins Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto mollitia expedita dolorem deleniti eligendi illum, nulla itaque facilis dolores <span> earum magnam illo, asperiores similique tempore aliquam voluptatibus </span> atque! Placeat, vero.</p>
 					</div>
 
 					
 
  <a href= 'javascript: network()' > Mes Réseaux </a>
 
-     <div style='display:none;' id='invisibles'>
+     <div id='invisibles'>
       
       <a href="https://www.linkedin.com/in/jacob-sangah-00164b135/"><i class="fab fa-linkedin"></i></a>
       <a href="https://www.facebook.com/jacob.s.supermarkett?ref=bookmarks"><i class="fab fa-facebook"></i></a>
@@ -41,47 +42,52 @@
    		   
    <main>
 
-	  </article> 
-
-		 <div id="Me">	
-		   <a href="https://www.lequipe.fr/">      
-					   		<h1>Me myself and i</h1>			   	 
-				   	    </a>		
-		</div>
+	  <article> 
 
 
-		<div id="Projects">
-			 <a href="https://www.sofoot.com/">	   	
-						  <h1>My projects</h1>
-				   	  </a>
-		</div>
+		 	
+			  <a href="https://www.lequipe.fr/" id="col1">      
+						   		<h1>HELLO WORLD c'est jabino </h1>
+						   		<br>
+						   		<br>
+						   		<p>
+	        Wow, cela fait plaisir d'avoir fini cette petite page pour que vous puissez en profiter, alors voici un article rapide pour vous dire bonjour.</p>			   	 
+					   	    </a>		
+			
 
+
+			
+				 <a href="https://www.sofoot.com/" id="col3">	   	
+							  <h1>My projects</h1>
+							  <br>
+							  <br>
+							  <p>Ici vous pourrez voir les nombreux et inchiffrable projets que j'ai mene d'une main de maitre </p>
+					   	  </a>
+			
+
+	  
+		            
+					<a href="https://www.francefootball.fr/" id="col2">	   	
+						     <h1>My skills</h1>
+						     <br>
+						     <br>
+						     <p>Alors ici c'est le coeur du programme.. qu'est ce que je sais faire avec un ordinateur dans les mains? vous le seriez bientot!!</p>
+						 
+				     </a>
+
+	    </article>
+
+			<div class="clear"></div>	   	   
 		
-		<div id="Skills">
-		 <a href="https://www.francefootball.fr/">	   	
-			     <h1>My skills</h1>
-				   	   </a>
-		</div>
-
-
    </main>
    <footer>
 
-<div class="morph">
-<div>
-<div><div id="Skills">
-		 <a href="https://www.francefootball.fr/">	   	
-			     <h1>My skills</h1>
-				   	   </a></div>
-</div>
-<div>
-   
-   
-<!-- 
-   		<div class="form">
+ <a href="#" id="toggler">on se capte?</a>
+ <div id="toggle">
+   <div class="form">
    			<form action="contact.php" method="post">
    				<fieldset>
-   					<legend>Me Concatez</legend>
+   					<legend>Contact</legend>
 
 		   			  	<div>
 							<label for="name">Nom :</label>
@@ -103,12 +109,18 @@
 					  		<div>
 							    <label for="msg">Message:</label>
 							    <textarea id="msg" name="user_message" placeholder="Veuillez saisir votre message"></textarea>
+							    <button href="contact.php" type="sumbit" id="click">envoyer</button>
 		  					</div>
 		    	</fieldset>
    			</form>
 
    		</div>
--->
+</div>
+ 
+ 
+
+  
+   		
 
    </footer>
 
