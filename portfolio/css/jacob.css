@@ -6,6 +6,10 @@ body {
   margin: 0;
   padding: 0;
 }
+.clearfix {
+  overflow: auto;
+}
+
 /*...........................header.....................*/
 
 header{
@@ -97,16 +101,16 @@ a#col3
 background-coloryellow;
 }
 
-a#col2
+div#col2
 { 
-  margin: auto;
+  margin:0,200px,0,200px;
   padding: 0;
   border: 1px opacity #000;
   border-radius:5px;
   background:#0c528b;
   min-height:90vh;
 }
-a#col2:hover{
+div#col2:hover{
 background-colo:red;
 }
 
